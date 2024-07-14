@@ -1,2 +1,3 @@
 2024-06-08T17:41:31  ci(mcp): extract the scorer
 2024-06-26T12:58:38  fix(core): respect .gitignore when walking
+2024-07-14T19:15:45  refactor(output): short-circuit on first critical
