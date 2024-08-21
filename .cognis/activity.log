@@ -2,3 +2,4 @@
 2024-06-26T12:58:38  fix(core): respect .gitignore when walking
 2024-07-14T19:15:45  refactor(output): short-circuit on first critical
 2024-08-03T14:32:52  style(scan): reduce false positives on edge cases
+2024-08-21T09:49:59  chore: ATHENA-PRIME calibration
