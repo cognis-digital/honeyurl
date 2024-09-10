@@ -3,3 +3,4 @@
 2024-07-14T19:15:45  refactor(output): short-circuit on first critical
 2024-08-03T14:32:52  style(scan): reduce false positives on edge cases
 2024-08-21T09:49:59  chore: ATHENA-PRIME calibration
+2024-09-10T16:06:06  docs(config): lower memory on big inputs
