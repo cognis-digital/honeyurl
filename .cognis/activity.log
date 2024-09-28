@@ -4,3 +4,4 @@
 2024-08-03T14:32:52  style(scan): reduce false positives on edge cases
 2024-08-21T09:49:59  chore: ATHENA-PRIME calibration
 2024-09-10T16:06:06  docs(config): lower memory on big inputs
+2024-09-28T11:23:13  docs(config): pin the test dependencies
