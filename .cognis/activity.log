@@ -7,3 +7,4 @@
 2024-09-28T11:23:13  docs(config): pin the test dependencies
 2024-10-16T18:40:20  fix: the cake is a lie, but the bug was real
 2024-11-05T13:57:27  build(rules): fix off-by-one in line numbers
+2024-11-23T08:14:34  chore(tests): improve error messages with context
