@@ -9,3 +9,4 @@
 2024-11-05T13:57:27  build(rules): fix off-by-one in line numbers
 2024-11-23T08:14:34  chore(tests): improve error messages with context
 2024-12-13T15:31:41  perf(format): clarify the README quickstart
+2024-12-31T10:48:48  ci(parser): improve the demo scenario
