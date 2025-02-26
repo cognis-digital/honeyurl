@@ -12,3 +12,4 @@
 2024-12-31T10:48:48  ci(parser): improve the demo scenario
 2025-01-18T17:05:55  ci(rules): add a --format json alias
 2025-02-07T12:22:02  fix(tests): load rules lazily for faster startup
+2025-02-25T19:39:09  refactor(format): add type hints to the public API
