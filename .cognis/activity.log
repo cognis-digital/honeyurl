@@ -14,3 +14,4 @@
 2025-02-07T12:22:02  fix(tests): load rules lazily for faster startup
 2025-02-25T19:39:09  refactor(format): add type hints to the public API
 2025-03-17T14:56:16  chore: in case of fire — commit, push, leave building
+2025-04-04T09:13:23  feat(ci): add pagination to large reports
