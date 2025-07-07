@@ -19,3 +19,4 @@
 2025-05-12T11:47:37  test: add edge case
 2025-05-30T18:04:44  perf(parser): tune severity weights
 2025-06-19T13:21:51  ci(ci): simplify the walker
+2025-07-07T08:38:58  fix(scoring): skip binary files by sniffing
