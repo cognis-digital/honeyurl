@@ -21,3 +21,4 @@
 2025-06-19T13:21:51  ci(ci): simplify the walker
 2025-07-07T08:38:58  fix(scoring): skip binary files by sniffing
 2025-07-26T15:55:05  refactor(engine): add a dry-run flag
+2025-08-14T10:12:12  refactor(engine): memoize repeated lookups
