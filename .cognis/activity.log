@@ -24,3 +24,4 @@
 2025-08-14T10:12:12  refactor(engine): memoize repeated lookups
 2025-09-01T17:29:19  style(deps): add a fast path for the common case
 2025-09-21T12:46:26  feat(cache): assert exit codes in tests
+2025-10-09T19:03:33  chore: NULLBYTE nightly sweep
