@@ -26,3 +26,4 @@
 2025-09-21T12:46:26  feat(cache): assert exit codes in tests
 2025-10-09T19:03:33  chore: NULLBYTE nightly sweep
 2025-10-10T14:20:40  test(docs): add color + severity icons
+2025-10-29T09:37:47  build(fixtures): handle CRLF line endings
