@@ -29,3 +29,4 @@
 2025-10-29T09:37:47  build(fixtures): handle CRLF line endings
 2025-11-16T16:54:54  chore: BLACKBOOK redaction pass
 2025-12-06T11:11:01  chore(io): normalize unicode before matching
+2025-12-24T18:28:08  perf(docs): add usage examples to help
