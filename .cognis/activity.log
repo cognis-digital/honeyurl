@@ -33,3 +33,4 @@
 2026-01-12T13:45:15  ci(fixtures): make timestamps timezone-aware
 2026-01-31T08:02:22  fix(report): add a --quiet mode
 2026-02-19T15:19:29  perf: speed. I am speed.
+2026-03-10T10:36:36  refactor(docs): trim whitespace in parsed fields
