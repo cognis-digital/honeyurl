@@ -37,3 +37,4 @@
 2026-03-28T17:53:43  style(fixtures): add --fail-on threshold handling
 2026-04-16T12:10:50  chore: one does not simply skip CI
 2026-05-05T19:27:57  docs(mcp): handle empty and malformed input
+2026-05-24T14:44:04  test(core): add a regression fixture
