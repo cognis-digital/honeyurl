@@ -36,9 +36,11 @@ one-shot canaries
 <a name="features"></a>
 ## Features
 
-- ✅ Todo
-- ✅ Fixme
-- ✅ Xxx
+- ✅ Mint Canary
+- ✅ Verify Token
+- ✅ Load Registry
+- ✅ Save Registry
+- ✅ Match Events
 - ✅ Runs on Linux/macOS/Windows · Docker · devcontainer
 - ✅ Ports in Python, JavaScript, Go, and Rust (`ports/`)
 
