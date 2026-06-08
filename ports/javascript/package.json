@@ -1,0 +1,10 @@
+{
+  "name": "@cognis/honeyurl",
+  "version": "0.2.0",
+  "description": "JavaScript port of honeyurl (Cognis Neural Suite)",
+  "bin": {
+    "honeyurl": "index.js"
+  },
+  "license": "LicenseRef-COCL-1.0",
+  "type": "module"
+}
