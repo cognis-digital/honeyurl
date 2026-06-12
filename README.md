@@ -16,7 +16,7 @@
 </div>
 
 ```bash
-pip install cognis-honeyurl
+pip install "git+https://github.com/cognis-digital/honeyurl.git"
 honeyurl scan .            # → prioritized findings in seconds
 ```
 
@@ -50,7 +50,7 @@ one-shot canaries
 ## Quick start
 
 ```bash
-pip install cognis-honeyurl
+pip install "git+https://github.com/cognis-digital/honeyurl.git"
 honeyurl --version
 honeyurl scan .                       # scan current project
 honeyurl scan . --format json         # machine-readable
