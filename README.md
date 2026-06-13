@@ -20,6 +20,12 @@ pip install "git+https://github.com/cognis-digital/honeyurl.git"
 honeyurl scan .            # → prioritized findings in seconds
 ```
 
+<!-- cognis:layman:start -->
+## What is this?
+
+Honeyurl creates secret "canary" links or tokens — unique web addresses you hide inside documents, configs, or systems that should never be visited under normal use. If anyone accesses one, you get an immediate alert that something is wrong: someone opened a file they shouldn't have, leaked credentials, or is scanning your network. You create the canaries once, embed them in your assets, then point the scanner at your access logs to find out if any were tripped. It is aimed at security teams, developers, and anyone who wants a silent, tamper-evident tripwire with no cloud service or account required.
+<!-- cognis:layman:end -->
+
 ## Contents
 
 - [Why honeyurl?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [Architecture](#architecture) · [AI stack](#ai-stack) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Related](#related) · [Contributing](#contributing)
@@ -47,6 +53,42 @@ one-shot canaries
 <div align="right"><a href="#top">↑ back to top</a></div>
 
 <a name="quick-start"></a>
+<!-- cognis:install:start -->
+## Install
+
+`honeyurl` is source-available (not published to PyPI) — every method below installs
+straight from GitHub. Pick whichever you prefer; the one-line scripts auto-detect
+the best tool available on your machine.
+
+**One-liner (Linux / macOS):**
+```sh
+curl -fsSL https://raw.githubusercontent.com/cognis-digital/honeyurl/HEAD/install.sh | sh
+```
+
+**One-liner (Windows PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/cognis-digital/honeyurl/HEAD/install.ps1 | iex
+```
+
+**Or install manually — any one of:**
+```sh
+pipx install "git+https://github.com/cognis-digital/honeyurl.git"     # isolated (recommended)
+uv tool install "git+https://github.com/cognis-digital/honeyurl.git"  # uv
+pip install "git+https://github.com/cognis-digital/honeyurl.git"      # pip
+```
+
+**From source:**
+```sh
+git clone https://github.com/cognis-digital/honeyurl.git
+cd honeyurl && pip install .
+```
+
+Then run:
+```sh
+honeyurl --help
+```
+<!-- cognis:install:end -->
+
 ## Quick start
 
 ```bash
