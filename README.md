@@ -22,30 +22,37 @@ honeyurl scan .            # → prioritized findings in seconds
 
 ## Usage — step by step
 
-`honeyurl` mints canary URLs/tokens and matches access records against the
-registry to surface trip events (defensive use only). Two subcommands: `mint`
-and `scan`.
+> Defensive canary tokens.
 
-```bash
-# 1. Install
-pip install -e .
+1. **Install:**
 
-# 2. Mint canary token(s) into a registry (HMAC secret via --secret or
-#    $HONEYURL_SECRET; otherwise random)
-honeyurl mint --registry canaries.json --label "staging-readme" \
-  --kind url --base-url https://canary.example.net/t --count 3
+   ```bash
+   pip install honeyurl
+   ```
 
-# 3. Scan access/log records against the registry to find trips
-honeyurl scan --registry canaries.json --records access.jsonl
+2. **Mint canary token(s)** into a registry — the registry stores the HMAC secret and minted canaries:
 
-# 4. Read the result as JSON (which canary tripped, when, by whom)
-honeyurl --format json scan --registry canaries.json --records access.jsonl > trips.json
+   ```bash
+   honeyurl mint --registry canaries.json \
+     --base-url https://canary.example.net/t \
+     --kind url --label "staging-readme" --count 1
+   ```
 
-# 5. Automation — alert if any canary tripped (non-empty match set)
-honeyurl --format json scan --registry canaries.json --records access.jsonl \
-  | jq -e '.trips | length == 0' || notify-on-call.sh
-```
+   The secret can also come from `--secret` or `$HONEYURL_SECRET`; if no registry is given a random secret is printed to store safely.
 
+3. **Place the minted URL/token** in the resource you want to watch (a doc, a config, a page), then collect your access log.
+
+4. **Scan access records** (JSONL or plain log lines) against the registry for trips:
+
+   ```bash
+   honeyurl scan --registry canaries.json --records access.log
+   ```
+
+5. **Alerting / CI** — emit JSON and rely on the exit code (1 when critical/high trips are found, 0 otherwise):
+
+   ```bash
+   honeyurl --format json scan --registry canaries.json --records access.log | jq '.findings'
+   ```
 
 ## Contents
 
