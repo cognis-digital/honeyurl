@@ -20,6 +20,33 @@ pip install cognis-honeyurl
 honeyurl scan .            # → prioritized findings in seconds
 ```
 
+## Usage — step by step
+
+`honeyurl` mints canary URLs/tokens and matches access records against the
+registry to surface trip events (defensive use only). Two subcommands: `mint`
+and `scan`.
+
+```bash
+# 1. Install
+pip install -e .
+
+# 2. Mint canary token(s) into a registry (HMAC secret via --secret or
+#    $HONEYURL_SECRET; otherwise random)
+honeyurl mint --registry canaries.json --label "staging-readme" \
+  --kind url --base-url https://canary.example.net/t --count 3
+
+# 3. Scan access/log records against the registry to find trips
+honeyurl scan --registry canaries.json --records access.jsonl
+
+# 4. Read the result as JSON (which canary tripped, when, by whom)
+honeyurl --format json scan --registry canaries.json --records access.jsonl > trips.json
+
+# 5. Automation — alert if any canary tripped (non-empty match set)
+honeyurl --format json scan --registry canaries.json --records access.jsonl \
+  | jq -e '.trips | length == 0' || notify-on-call.sh
+```
+
+
 ## Contents
 
 - [Why honeyurl?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [Architecture](#architecture) · [AI stack](#ai-stack) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Related](#related) · [Contributing](#contributing)
