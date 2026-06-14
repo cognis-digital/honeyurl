@@ -80,6 +80,8 @@ def mint_canary(
     """
     if not secret:
         raise ValueError("secret is required to mint a canary")
+    if not base_url or not base_url.strip():
+        raise ValueError("base_url must be a non-empty string")
     token_id = secrets.token_hex(TOKEN_BYTES)
     sig = _sign(secret, token_id)
     token = f"{token_id}.{sig}"
@@ -115,14 +117,24 @@ def verify_token(secret: str, token: str) -> tuple[bool, str]:
     if not token_id:
         return (False, token)
     expected = _sign(secret, token_id)
+    # Signatures of different lengths are always invalid; compare_digest
+    # requires equal-length inputs to be constant-time, so guard explicitly.
+    if len(sig) != len(expected):
+        return (False, token_id)
     return (hmac.compare_digest(expected, sig), token_id)
 
 
 def load_registry(path: str) -> dict:
     with open(path, "r", encoding="utf-8") as fh:
         data = json.load(fh)
+    if not isinstance(data, dict):
+        raise ValueError("registry must be a JSON object")
     if "secret" not in data or "canaries" not in data:
         raise ValueError("registry missing 'secret' or 'canaries'")
+    if not data.get("secret"):
+        raise ValueError("registry 'secret' must be a non-empty string")
+    if not isinstance(data["canaries"], list):
+        raise ValueError("registry 'canaries' must be a JSON array")
     return data
 
 
@@ -182,8 +194,17 @@ def match_events(registry: dict, records: Iterable[dict]) -> list[TripEvent]:
     trip; we then classify severity by whether the signature validates and
     whether the token_id is in our registry.
     """
-    secret = registry["secret"]
-    known = {c["token_id"]: c for c in registry["canaries"]}
+    secret = registry.get("secret") or ""
+    if not secret:
+        raise ValueError("registry 'secret' is empty or missing")
+    canaries = registry.get("canaries") or []
+    # Skip any canary entry that is not a dict or is missing 'token_id'; this
+    # prevents a KeyError if the registry file was partially written or edited.
+    known = {
+        c["token_id"]: c
+        for c in canaries
+        if isinstance(c, dict) and c.get("token_id")
+    }
 
     events: list[TripEvent] = []
     for rec in records:
@@ -209,7 +230,7 @@ def match_events(registry: dict, records: Iterable[dict]) -> list[TripEvent]:
             TripEvent(
                 token=token,
                 token_id=token_id,
-                label=canary["label"] if canary else "(unknown)",
+                label=canary.get("label", "(no-label)") if canary else "(unknown)",
                 valid_signature=valid,
                 severity=severity,
                 reason=reason,

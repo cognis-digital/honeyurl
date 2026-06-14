@@ -1,6 +1,8 @@
-"""HONEYURL MCP server — exposes scan() as an MCP tool for Cognis.Studio."""
+"""HONEYURL MCP server — exposes match_events() as an MCP tool for Cognis.Studio."""
 from __future__ import annotations
-from honeyurl.core import scan, to_json
+import json
+from honeyurl.core import match_events, load_registry
+
 
 def serve() -> int:
     """Start an MCP stdio server. Requires the optional 'mcp' extra:
@@ -14,9 +16,14 @@ def serve() -> int:
     app = FastMCP("honeyurl")
 
     @app.tool()
-    def honeyurl_scan(target: str) -> str:
-        """Generate canary URLs/tokens + a matcher for trip events. Returns JSON findings."""
-        return to_json(scan(target))
+    def honeyurl_scan(registry_path: str, records: list[dict]) -> str:
+        """Match access records against a canary registry; returns JSON trip events."""
+        try:
+            reg = load_registry(registry_path)
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            return json.dumps({"error": str(exc)})
+        events = match_events(reg, records)
+        return json.dumps([e.to_dict() for e in events])
 
     app.run()
     return 0

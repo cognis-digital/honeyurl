@@ -123,5 +123,119 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(code, 2)
 
 
+class TestHardening(unittest.TestCase):
+    """Edge-case and error-path tests added during hardening pass."""
+
+    # ------------------------------------------------------------------ core
+
+    def test_verify_token_wrong_sig_length(self):
+        """A token whose sig is the wrong length must be rejected, not crash."""
+        c = mint_canary(SECRET)
+        short_sig = c.token_id + ".abc"       # sig too short
+        long_sig = c.token_id + ".abc" * 20   # sig too long
+        ok_short, _ = verify_token(SECRET, short_sig)
+        ok_long, _ = verify_token(SECRET, long_sig)
+        self.assertFalse(ok_short)
+        self.assertFalse(ok_long)
+
+    def test_verify_token_empty_and_no_dot(self):
+        """Empty or dot-free strings return False without raising."""
+        ok1, _ = verify_token(SECRET, "")
+        ok2, _ = verify_token(SECRET, "nodothere")
+        self.assertFalse(ok1)
+        self.assertFalse(ok2)
+
+    def test_mint_canary_empty_base_url_raises(self):
+        """mint_canary with an empty base_url must raise ValueError."""
+        with self.assertRaises(ValueError):
+            mint_canary(SECRET, base_url="")
+
+    def test_match_events_malformed_canary_dicts_skipped(self):
+        """Canary entries missing 'token_id' are silently skipped; no KeyError."""
+        good = mint_canary(SECRET, label="good")
+        bad_entry = {"label": "no-id-here"}  # missing token_id
+        reg = {"secret": SECRET, "canaries": [good.to_dict(), bad_entry]}
+        # Accessing a real token should still work
+        events = match_events(reg, [{"token": good.token}])
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].severity, "critical")
+
+    def test_match_events_empty_records(self):
+        """An empty records iterable returns an empty list."""
+        c = mint_canary(SECRET)
+        reg = {"secret": SECRET, "canaries": [c.to_dict()]}
+        self.assertEqual(match_events(reg, []), [])
+
+    def test_load_registry_invalid_json(self):
+        """load_registry on a non-JSON file raises json.JSONDecodeError."""
+        import json as _json
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        ) as fh:
+            fh.write("not json {{{")
+            tmp = fh.name
+        try:
+            with self.assertRaises(_json.JSONDecodeError):
+                from honeyurl.core import load_registry
+                load_registry(tmp)
+        finally:
+            os.unlink(tmp)
+
+    def test_load_registry_canaries_not_list(self):
+        """load_registry raises ValueError when 'canaries' is not a list."""
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        ) as fh:
+            json.dump({"secret": "x", "canaries": "not-a-list"}, fh)
+            tmp = fh.name
+        try:
+            with self.assertRaises(ValueError, msg="canaries must be a list"):
+                from honeyurl.core import load_registry
+                load_registry(tmp)
+        finally:
+            os.unlink(tmp)
+
+    # ------------------------------------------------------------------ CLI
+
+    def test_scan_missing_records_file_exit_two(self):
+        """scan with a missing records file exits with code 2 (not a traceback)."""
+        with tempfile.TemporaryDirectory() as d:
+            reg_path = os.path.join(d, "reg.json")
+            c = mint_canary(SECRET)
+            save_registry(reg_path, SECRET, [c])
+            buf = io.StringIO()
+            old_err = sys.stderr
+            sys.stderr = buf
+            try:
+                code = main(
+                    ["scan", "--registry", reg_path,
+                     "--records", os.path.join(d, "does_not_exist.jsonl")]
+                )
+            finally:
+                sys.stderr = old_err
+            self.assertEqual(code, 2)
+            self.assertIn("error:", buf.getvalue())
+
+    def test_scan_malformed_registry_exit_two(self):
+        """scan against a malformed registry JSON exits with code 2."""
+        with tempfile.TemporaryDirectory() as d:
+            reg_path = os.path.join(d, "bad_reg.json")
+            rec_path = os.path.join(d, "rec.jsonl")
+            with open(reg_path, "w") as f:
+                f.write('{"not_secret": true}')
+            with open(rec_path, "w") as f:
+                f.write("")
+            buf = io.StringIO()
+            old_err = sys.stderr
+            sys.stderr = buf
+            try:
+                code = main(
+                    ["scan", "--registry", reg_path, "--records", rec_path]
+                )
+            finally:
+                sys.stderr = old_err
+            self.assertEqual(code, 2)
+
+
 if __name__ == "__main__":
     unittest.main()
