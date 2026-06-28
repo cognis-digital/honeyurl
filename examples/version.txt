@@ -1,0 +1,3 @@
+$ honeyurl-emit --version
+
+honeyurl 0.1.0

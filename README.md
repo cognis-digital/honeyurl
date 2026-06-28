@@ -20,6 +20,59 @@ pip install cognis-honeyurl
 honeyurl scan .            # → prioritized findings in seconds
 ```
 
+
+<!-- cognis:example:start -->
+## 🔎 Example output
+
+Real, reproducible output from the tool — runs offline:
+
+```console
+$ honeyurl-emit --version
+honeyurl 0.1.0
+```
+
+```console
+$ honeyurl-emit --help
+usage: honeyurl [-h] [--version] [--format {table,json}] {mint,scan} ...
+
+Generate canary URLs/tokens and match trip events (defensive).
+
+positional arguments:
+  {mint,scan}
+    mint                mint canary token(s)
+    scan                match access records against registry
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --format {table,json}
+```
+
+> Blocks above are real `honeyurl` output — reproduce them from a clone.
+
+**Sample result format** _(illustrative values — run on your own data for real findings):_
+
+```
+{
+"timestamp": "2023-02-16T14:30:00Z",
+"actor": {
+"name": "John Doe"
+},
+"object": {
+"type": "url",
+"value": "https://example.com/vulnerable-page"
+},
+"finding": {
+"id": "1234567890abcdef",
+"category": "vulnerability",
+"severity": "high",
+"description": "A high-severity vulnerability was found on the webpage."
+}
+}
+```
+
+<!-- cognis:example:end -->
+
 ## Usage — step by step
 
 > Defensive canary tokens.

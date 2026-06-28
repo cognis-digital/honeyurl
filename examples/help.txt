@@ -1,0 +1,15 @@
+$ honeyurl-emit --help
+
+usage: honeyurl [-h] [--version] [--format {table,json}] {mint,scan} ...
+
+Generate canary URLs/tokens and match trip events (defensive).
+
+positional arguments:
+  {mint,scan}
+    mint                mint canary token(s)
+    scan                match access records against registry
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --format {table,json}
